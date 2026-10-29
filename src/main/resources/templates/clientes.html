@@ -1,0 +1,243 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: "Aptos", "Segoe UI", sans-serif;
+            color: #202c29;
+            background: #edf2ef;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 32px 0;
+            background:
+                radial-gradient(ellipse at 12% 0%, rgba(147, 190, 163, 0.2), transparent 34rem),
+                #edf2ef;
+        }
+
+        #contenedora {
+            width: min(94%, 1120px) !important;
+            margin: 0 auto !important;
+            padding: 32px 36px;
+            overflow-x: auto;
+            background: #fff;
+            border: 1px solid #dce5df;
+            border-radius: 12px;
+            box-shadow: 0 18px 48px rgba(34, 57, 45, 0.08);
+        }
+
+        #contenedora > .clearfix:first-child {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 24px;
+        }
+
+        #contenedora > .clearfix:first-child > div:first-child {
+            float: none !important;
+            width: auto !important;
+        }
+
+        h1 {
+            margin: 0;
+            color: #183d32;
+            font-family: Georgia, "Times New Roman", serif; 
+            font-size: 34px;
+            font-weight: 600;
+            line-height: 1.15;
+        }
+
+        #contenedora > .clearfix:first-child > div:last-child {
+            min-height: 0 !important;
+            overflow: visible !important;
+        }
+
+        #contenedora > .clearfix:first-child > div:last-child > div {
+            position: static !important;
+        }
+
+        #contenedora > .clearfix:nth-child(2),
+        #contenedora > .clearfix:nth-child(n + 4) {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(82px, 1fr)) minmax(210px, 1.7fr);
+            align-items: center;
+            gap: 12px;
+            min-width: 900px;
+        }
+
+        #contenedora > .clearfix:nth-child(2) {
+            padding: 12px 14px;
+            color: #587067;
+            background: #f2f6f3;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        #contenedora > .clearfix:nth-child(n + 4) {
+            margin-top: 0 !important;
+            padding: 16px 14px;
+            border-bottom: 1px solid #e8eeea;
+            color: #34443e;
+            font-size: 14px;
+            transition: background-color 140ms ease;
+        }
+
+        #contenedora > .clearfix:nth-child(n + 4):hover {
+            background: #f8faf8;
+        }
+
+        #contenedora > .clearfix:nth-child(2) > div,
+        #contenedora > .clearfix:nth-child(n + 4) > div {
+            float: none !important;
+            width: auto !important;
+            min-width: 0;
+            overflow: visible !important;
+        }
+
+        #contenedora > .clearfix:nth-child(3) {
+            display: none;
+        }
+
+        form {
+            margin: 0;
+        }
+
+        #contenedora > .clearfix:nth-child(n + 4) form {
+            display: inline-block !important;
+            margin: 2px 4px 2px 0;
+        }
+
+        input[type="submit"] {
+            min-height: 36px;
+            padding: 0 12px;
+            color: #315347;
+            background: #fff;
+            border: 1px solid #cfddd4;
+            border-radius: 5px;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 140ms ease, background-color 140ms ease, border-color 140ms ease;
+        }
+
+        input[type="submit"]:hover {
+            color: #fff;
+            background: #315f4c;
+            border-color: #315f4c;
+        }
+
+        input[type="submit"]:focus-visible {
+            outline: 3px solid rgba(58, 125, 94, 0.3);
+            outline-offset: 2px;
+        }
+
+        #contenedora > .clearfix:first-child input[type="submit"] {
+            min-height: 42px;
+            padding: 0 20px;
+            color: #fff;
+            background: #28664d;
+            border-color: #28664d;
+            font-size: 14px;
+        }
+
+        #contenedora > .clearfix:first-child input[type="submit"]:hover {
+            background: #1d503b;
+            border-color: #1d503b;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 16px 0;
+            }
+
+            #contenedora {
+                width: 96% !important;
+                padding: 24px 18px;
+            }
+
+            #contenedora > .clearfix:first-child {
+                padding-bottom: 18px;
+            }
+
+            h1 {
+                font-size: 29px;
+            }
+        }
+
+        .clearfix:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="contenedora" style="float:none; margin: 0 auto;width: 95%;">
+        <div class="clearfix">
+            <div style="float: left; width: 50%">
+                <h1>Clientes</h1>
+            </div>
+
+            <div style="float: none;width: auto;overflow: hidden;min-height: 80px;position: relative;">
+                <div style="position: absolute; left: 39%; top : 39%;">
+
+                    <form action="/clientes/crear">
+                        <input type="submit" value="Crear">
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <div style="float: left;width: 14%">Id</div>
+            <div style="float: left;width: 14%">Nombre</div>
+            <div style="float: left;width: 14%">Apellido1</div>
+            <div style="float: left;width: 14%">Apellido2</div>
+            <div style="float: left;width: 14%">Ciudad</div>
+            <div style="float: left;width: 14%">Categoría</div>
+            <div style="float: none;width: auto;overflow: hidden;">Acción</div>
+        </div>
+
+        <div class="clearfix">
+            <hr>
+        </div>
+
+        <div th:each="cliente : ${Clientes}" style="margin-top: 6px;" class="clearfix">
+            <div style="float: left;width: 14%" th:text="${cliente.id}">id</div>
+            <div style="float: left;width: 14%" th:text="${cliente.nombre}">nombre</div>
+            <div style="float: left;width: 14%" th:text="${cliente.apellido1}">apellido1</div>
+            <div style="float: left;width: 14%" th:text="${cliente.apellido2 ?: '&nbsp;'}">apellido2</div>
+            <div style="float: left;width: 14%" th:text="${cliente.ciudad}">ciudad</div>
+            <div style="float: left;width: 14%" th:text="${cliente.categoria}">categoría</div>
+            <div style="float: none;width: auto;overflow: hidden;">
+                <form th:action="@{/clientes/{id}(id=${cliente.id})}" style="display: inline;">
+                    <input type="submit" value="Ver Detalle">
+                </form>
+                <form th:action="@{/clientes/editar/{id}(id=${cliente.id})}" style="display: inline;">
+                    <input type="submit" value="Editar">
+                </form>
+                <form th:action="@{/clientes/borrar/{id}(id=${cliente.id})}" method="post" style="display: inline;">
+                    <input type="submit" value="Eliminar">
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

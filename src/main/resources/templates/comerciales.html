@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comerciales</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 32px 16px;
+            color: #202c29;
+            background: #edf2ef;
+            font-family: "Aptos", "Segoe UI", sans-serif;
+        }
+
+        main {
+            width: min(100%, 900px);
+            margin: 0 auto;
+            padding: 28px;
+            overflow-x: auto;
+            background: #fff;
+            border: 1px solid #dce5df;
+            border-radius: 8px;
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            color: #183d32;
+            font-family: Georgia, "Times New Roman", serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e8eeea;
+        }
+
+        th {
+            color: #587067;
+            background: #f2f6f3;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Comerciales</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Apellido 1</th>
+                    <th>Apellido 2</th>
+                    <th>Comisión</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="comercial : ${Comerciales}">
+                    <td th:text="${comercial.id}">id</td>
+                    <td th:text="${comercial.nombre}">nombre</td>
+                    <td th:text="${comercial.apellido1}">apellido1</td>
+                    <td th:text="${comercial.apellido2 ?: ''}">apellido2</td>
+                    <td th:text="${comercial.comision}">comision</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
