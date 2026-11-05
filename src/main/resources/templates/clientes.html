@@ -21,9 +21,13 @@
         </div>
         <nav class="col-12 col-md-auto d-flex flex-wrap gap-2" aria-label="Navegación principal">
             <a class="btn btn-outline-success" th:href="@{/comerciales}">Comerciales</a>
+            <a class="btn btn-outline-success" th:href="@{/pedidos}">Pedidos</a>
             <a class="btn btn-success" th:href="@{/clientes/crear}">Crear cliente</a>
         </nav>
     </header>
+
+    <div th:if="${mensaje}" class="alert" th:classappend="' alert-' + tipoMensaje" role="alert"
+         th:text="${mensaje}"></div>
 
     <div class="row g-2 rounded-top px-3 py-2 grid-heading d-none d-lg-flex" aria-hidden="true">
         <div class="col-lg-1">Id</div><div class="col-lg-2">Nombre</div>
