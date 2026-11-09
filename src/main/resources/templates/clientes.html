@@ -29,6 +29,20 @@
     <div th:if="${mensaje}" class="alert" th:classappend="' alert-' + tipoMensaje" role="alert"
          th:text="${mensaje}"></div>
 
+    <form class="row g-2 align-items-end mb-4" th:action="@{/clientes}" method="get">
+        <div class="col-12 col-md-5 col-lg-4">
+            <label class="form-label" for="ciudad">Filtrar por ciudad</label>
+            <input class="form-control" id="ciudad" name="ciudad" type="text"
+                   placeholder="Ej.: Madrid" th:value="${ciudadFiltro}">
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-success" type="submit">Filtrar</button>
+        </div>
+        <div class="col-auto">
+            <a class="btn btn-outline-secondary" th:href="@{/clientes}">Limpiar</a>
+        </div>
+    </form>
+
     <div class="row g-2 rounded-top px-3 py-2 grid-heading d-none d-lg-flex" aria-hidden="true">
         <div class="col-lg-1">Id</div><div class="col-lg-2">Nombre</div>
         <div class="col-lg-2">Apellido 1</div><div class="col-lg-2">Apellido 2</div>

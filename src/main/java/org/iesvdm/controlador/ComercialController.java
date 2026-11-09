@@ -31,6 +31,7 @@ public class ComercialController {
 			return "redirect:/comerciales";
 		}
 		model.addAttribute("comercial", comercial);
+		model.addAttribute("pedidos", comercialService.listPedidosByComercial(id));
 		return "detalle-comercial";
 	}
 

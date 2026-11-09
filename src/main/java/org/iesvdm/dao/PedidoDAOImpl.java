@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.iesvdm.modelo.Pedido;
 import org.iesvdm.modelo.PedidoDetalle;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -19,7 +20,7 @@ public class PedidoDAOImpl implements PedidoDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private static final String PEDIDO_DETALLE_SELECT = """
+    private static final String SELECT_PEDIDOS_CON_NOMBRES = """
             SELECT p.id, p.total, p.fecha, p.id_cliente, p.id_comercial,
                    CONCAT_WS(' ', c.nombre, c.apellido1, c.apellido2) AS cliente_nombre,
                    CONCAT_WS(' ', co.nombre, co.apellido1, co.apellido2) AS comercial_nombre
@@ -27,6 +28,15 @@ public class PedidoDAOImpl implements PedidoDAO {
             JOIN cliente c ON c.id = p.id_cliente
             JOIN comercial co ON co.id = p.id_comercial
             """;
+
+    private static final RowMapper<PedidoDetalle> PEDIDO_DETALLE_ROW_MAPPER = (rs, rowNum) -> new PedidoDetalle(
+            rs.getInt("id"),
+            rs.getDouble("total"),
+            rs.getObject("fecha", java.time.LocalDate.class),
+            rs.getInt("id_cliente"),
+            rs.getInt("id_comercial"),
+            rs.getString("cliente_nombre"),
+            rs.getString("comercial_nombre"));
 
     PedidoDAOImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -89,32 +99,37 @@ public class PedidoDAOImpl implements PedidoDAO {
     @Override
     public List<PedidoDetalle> getAllDetalles() {
         List<PedidoDetalle> pedidos = jdbcTemplate.query(
-                PEDIDO_DETALLE_SELECT + " ORDER BY p.id",
-                (rs, rowNum) -> mapPedidoDetalle(rs));
+                SELECT_PEDIDOS_CON_NOMBRES + " ORDER BY p.id",
+                PEDIDO_DETALLE_ROW_MAPPER);
 
         log.info("Devueltos {} pedidos con nombres relacionados.", pedidos.size());
         return pedidos;
     }
 
     @Override
+    public List<PedidoDetalle> findByComercialId(int comercialId) {
+        return jdbcTemplate.query(
+                SELECT_PEDIDOS_CON_NOMBRES + " WHERE p.id_comercial = ?",
+                PEDIDO_DETALLE_ROW_MAPPER,
+                comercialId);
+    }
+
+    @Override
+    public List<PedidoDetalle> findByClienteId(int clienteId) {
+        return jdbcTemplate.query(
+                SELECT_PEDIDOS_CON_NOMBRES + " WHERE p.id_cliente = ? ORDER BY p.id",
+                PEDIDO_DETALLE_ROW_MAPPER,
+                clienteId);
+    }
+
+    @Override
     public Optional<PedidoDetalle> findDetalle(int id) {
         List<PedidoDetalle> pedidos = jdbcTemplate.query(
-                PEDIDO_DETALLE_SELECT + " WHERE p.id = ?",
-                (rs, rowNum) -> mapPedidoDetalle(rs),
+                SELECT_PEDIDOS_CON_NOMBRES + " WHERE p.id = ?",
+                PEDIDO_DETALLE_ROW_MAPPER,
                 id);
 
         return pedidos.stream().findFirst();
-    }
-
-    private PedidoDetalle mapPedidoDetalle(java.sql.ResultSet rs) throws java.sql.SQLException {
-        return new PedidoDetalle(
-                rs.getInt("id"),
-                rs.getDouble("total"),
-                rs.getObject("fecha", java.time.LocalDate.class),
-                rs.getInt("id_cliente"),
-                rs.getInt("id_comercial"),
-                rs.getString("cliente_nombre"),
-                rs.getString("comercial_nombre"));
     }
 
     @Override
