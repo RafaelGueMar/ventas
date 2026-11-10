@@ -31,7 +31,10 @@ public class ComercialController {
 			return "redirect:/comerciales";
 		}
 		model.addAttribute("comercial", comercial);
-		model.addAttribute("pedidos", comercialService.listPedidosByComercial(id));
+		var pedidos = comercialService.listPedidosByComercial(id);
+		model.addAttribute("pedidos", pedidos);
+		model.addAttribute("estadisticasPedidos", comercialService.calcularEstadisticasPedidos(pedidos));
+		model.addAttribute("totalesPorCliente", comercialService.calcularTotalesPorCliente(pedidos));
 		return "detalle-comercial";
 	}
 
