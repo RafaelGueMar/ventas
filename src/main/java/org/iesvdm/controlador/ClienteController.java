@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 
 @Controller
 public class ClienteController {
@@ -70,6 +71,7 @@ public class ClienteController {
         model.addAttribute("cliente", cliente);
         model.addAttribute("formAction", "/clientes/editar/" + id);
         model.addAttribute("titulo", "Editar cliente");
+        cargarComerciales(model, id);
         return "form-cliente";
     }
 
@@ -78,6 +80,37 @@ public class ClienteController {
         cliente.setId(id);
         clienteService.replaceCliente(cliente);
         return "redirect:/clientes";
+    }
+
+    @PostMapping("/clientes/editar/{id}/comerciales")
+    public String agregarComercial(@PathVariable Integer id,
+            @RequestParam int comercialId,
+            @RequestParam LocalDate fecha,
+            @RequestParam int prioridad,
+            RedirectAttributes redirectAttributes) {
+        try {
+            clienteService.addComercial(id, comercialId, fecha, prioridad);
+            redirectAttributes.addFlashAttribute("mensaje", "Comercial vinculado correctamente.");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("mensaje", "El comercial ya está vinculado a este cliente.");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "warning");
+        }
+        return "redirect:/clientes/editar/" + id;
+    }
+
+    @PostMapping("/clientes/editar/{clienteId}/comerciales/{comercialId}/borrar")
+    public String borrarComercial(@PathVariable Integer clienteId, @PathVariable Integer comercialId,
+            RedirectAttributes redirectAttributes) {
+        clienteService.removeComercial(clienteId, comercialId);
+        redirectAttributes.addFlashAttribute("mensaje", "Vínculo eliminado correctamente.");
+        redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+        return "redirect:/clientes/editar/" + clienteId;
+    }
+
+    private void cargarComerciales(Model model, int clienteId) {
+        model.addAttribute("comercialesDisponibles", clienteService.listComercialesDisponibles(clienteId));
+        model.addAttribute("comercialesVinculados", clienteService.listComercialesByCliente(clienteId));
     }
 
     @PostMapping("/clientes/borrar/{id}")
